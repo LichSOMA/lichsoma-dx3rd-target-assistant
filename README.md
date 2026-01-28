@@ -1,4 +1,4 @@
-## DX3rd Target Assistant
+## LichSOMA's DX3rd Target Assistant
 
 **DX3rd Target Assistant**는 Foundry VTT v13, `double-cross-3rd` 시스템, `sequencer` 모듈을 사용하는 환경에서  
 콤보 / 이펙트 / 스펠 / 사이오닉 아이템의 **타게팅을 자동화**해 주는 모듈입니다.
