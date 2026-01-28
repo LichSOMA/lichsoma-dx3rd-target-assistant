@@ -44,22 +44,30 @@
 - **Area (범위)**:
   - 3x3(9칸) 크로스헤어를 찍어서 해당 범위와 겹치는 **모든 토큰**을 타겟팅
 - **Area(Enemies) (범위(적))**:
-  - 기본적으로 `actor.system.actorType`이 `Enemy` 또는 `Troop`인 토큰만 타겟팅
+  - **상대적 적 판단**: 실행하는 액터의 타입에 따라 적이 달라집니다
+    - 실행 액터가 `Enemy` 또는 `Troop`이면 → 타겟은 `PlayerCharacter` 또는 `Ally`
+    - 실행 액터가 `PlayerCharacter` 또는 `Ally`이면 → 타겟은 `Enemy` 또는 `Troop`
   - **특수 규칙**:  
     아이템의 `system.attackRoll`이 `"-"`가 아니고,  
     액터가 `berserk` 컨디션을 가지며 `system.conditions.berserk.type === "destruction"` 인 경우  
     → **자신만 제외**하고 actorType과 관계없이 범위 내 토큰을 모두 타겟팅
 - **Area(Allies) (범위(아군))**:
-  - `actorType`이 `PlayerCharacter` 또는 `Ally`인 토큰만 타겟팅
+  - **상대적 아군 판단**: 실행하는 액터의 타입에 따라 아군이 달라집니다
+    - 실행 액터가 `Enemy` 또는 `Troop`이면 → 타겟은 `Enemy` 또는 `Troop` (같은 진영)
+    - 실행 액터가 `PlayerCharacter` 또는 `Ally`이면 → 타겟은 `PlayerCharacter` 또는 `Ally` (같은 진영)
   - "자신 제외"가 체크되어 있으면 자신의 토큰은 제외
 - **Scene (장면)**:
   - 장면에 표시된 **범위 하이라이트 전체**(DX3rdUniversalHandler 큐 기준)를 사용
   - 하이라이트 범위 안의 모든 토큰을, 조건(은밀/숨김/자신 제외 등)에 맞게 자동 타겟팅
 - **Scene(Enemies) (장면(적))**:
-  - 기본적으로 `Enemy` / `Troop`만 선택
+  - **상대적 적 판단**: **범위(적)**과 동일한 로직 적용
+    - 실행 액터가 `Enemy` 또는 `Troop`이면 → 타겟은 `PlayerCharacter` 또는 `Ally`
+    - 실행 액터가 `PlayerCharacter` 또는 `Ally`이면 → 타겟은 `Enemy` 또는 `Troop`
   - destruction berserk 특수 규칙은 **범위(적)**과 동일하게 적용
 - **Scene(Allies) (장면(아군))**:
-  - `PlayerCharacter` / `Ally`만 선택
+  - **상대적 아군 판단**: **범위(아군)**과 동일한 로직 적용
+    - 실행 액터가 `Enemy` 또는 `Troop`이면 → 타겟은 `Enemy` 또는 `Troop` (같은 진영)
+    - 실행 액터가 `PlayerCharacter` 또는 `Ally`이면 → 타겟은 `PlayerCharacter` 또는 `Ally` (같은 진영)
   - "자신 제외"가 체크되어 있으면 자신의 토큰은 제외
 
 ---
@@ -84,17 +92,46 @@
 
 ---
 
-### 5. 공통 필터링 규칙
+### 5. 필터링 처리 규칙
 
-모든 타게팅에서 다음 규칙이 공통으로 적용됩니다.
+모든 타게팅에서 다음 필터링 규칙이 순서대로 적용됩니다.
 
-- **hide된 토큰**: 항상 타겟팅에서 제외
+#### 5.1 공통 필터링
+
+- **hide된 토큰**: 항상 타겟팅에서 제외 (은밀 무시 설정과 무관)
 - **은밀(stealth)**:
-  - "은밀 무시" 체크 해제 시 stealth 상태의 토큰은 제외
-  - 체크 시 stealth 여부 무시
+  - "은밀 무시" 체크 해제 시: `stealth` 컨디션/상태를 가진 토큰은 제외
+  - "은밀 무시" 체크 시: stealth 여부 무시하고 모든 토큰 선택 가능
 - **전투 중에만 활성화**:
   - 모듈 설정에서 "전투 중에만 활성화"가 켜져 있으면,  
     현재 컴뱃이 없을 때는 어떤 타게팅도 실행되지 않음
+
+#### 5.2 액터 타입 필터링 (범위(적), 범위(아군), 장면(적), 장면(아군))
+
+**상대적 적/아군 판단**이 적용됩니다. 실행하는 액터의 타입에 따라 적과 아군이 달라집니다.
+
+- **범위(적) / 장면(적)**:
+  - 실행 액터가 `Enemy` 또는 `Troop`이면 → 타겟은 `PlayerCharacter` 또는 `Ally`
+  - 실행 액터가 `PlayerCharacter` 또는 `Ally`이면 → 타겟은 `Enemy` 또는 `Troop`
+  - 실행 액터의 타입이 불명확하면 기본 동작 (타겟은 `Enemy` 또는 `Troop`)
+
+- **범위(아군) / 장면(아군)**:
+  - 실행 액터가 `Enemy` 또는 `Troop`이면 → 타겟은 `Enemy` 또는 `Troop` (같은 진영)
+  - 실행 액터가 `PlayerCharacter` 또는 `Ally`이면 → 타겟은 `PlayerCharacter` 또는 `Ally` (같은 진영)
+  - 실행 액터의 타입이 불명확하면 기본 동작 (타겟은 `PlayerCharacter` 또는 `Ally`)
+
+#### 5.3 특수 규칙
+
+- **destruction berserk 특수 규칙** (범위(적), 장면(적)에만 적용):
+  - 조건:
+    1. 아이템의 `system.attackRoll`이 `"-"`가 아님
+    2. 액터가 `berserk` 컨디션 보유
+    3. `system.conditions.berserk.type === "destruction"`
+  - 효과: 액터 타입 필터링을 무시하고, **자신만 제외**한 채 범위 내 모든 토큰을 타겟팅
+
+- **자신 제외**:
+  - `범위`, `범위(아군)`, `장면`, `장면(아군)`에서만 사용 가능
+  - 체크 시 자신의 토큰(`actorParam.id === token.actor.id`)은 타겟팅에서 제외
 
 ---
 

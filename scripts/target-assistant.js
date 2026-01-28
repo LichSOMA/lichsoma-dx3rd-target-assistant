@@ -1910,6 +1910,8 @@ function hasStealthCondition(token) {
           
           // 액터 타입 필터링
           const actorType = token.actor.system?.actorType || token.actor.data?.data?.actorType || null;
+          const sourceActorType = actor.system?.actorType || actor.data?.data?.actorType || null;
+          
           if (targetType === "Area(Enemies)") {
             // destruction 타입의 berserk 컨디션이 있으면 액터 타입 필터링 없이 자신만 제외
             if (shouldExcludeSelfForBerserk) {
@@ -1918,15 +1920,43 @@ function hasStealthCondition(token) {
               }
               // 액터 타입 필터링 없이 모든 타입 선택 가능
             } else {
-              // 일반적인 경우: 적만 선택 (enemy 또는 troop)
-              if (actorType !== "Enemy" && actorType !== "Troop") {
-                return false;
+              // 실행 액터가 Enemy 또는 Troop이면 적은 PlayerCharacter 또는 Ally
+              // 실행 액터가 PlayerCharacter 또는 Ally이면 적은 Enemy 또는 Troop
+              if (sourceActorType === "Enemy" || sourceActorType === "Troop") {
+                // 실행 액터가 적이면, 타겟은 아군(PlayerCharacter 또는 Ally)이어야 함
+                if (actorType !== "PlayerCharacter" && actorType !== "Ally") {
+                  return false;
+                }
+              } else if (sourceActorType === "PlayerCharacter" || sourceActorType === "Ally") {
+                // 실행 액터가 아군이면, 타겟은 적(Enemy 또는 Troop)이어야 함
+                if (actorType !== "Enemy" && actorType !== "Troop") {
+                  return false;
+                }
+              } else {
+                // 실행 액터 타입이 불명확하면 기본 동작 (Enemy 또는 Troop)
+                if (actorType !== "Enemy" && actorType !== "Troop") {
+                  return false;
+                }
               }
             }
           } else if (targetType === "Area(Allies)") {
-            // 아군만 선택 (PlayerCharacter 또는 Ally)
-            if (actorType !== "PlayerCharacter" && actorType !== "Ally") {
-              return false;
+            // 실행 액터가 Enemy 또는 Troop이면 아군은 Enemy 또는 Troop
+            // 실행 액터가 PlayerCharacter 또는 Ally이면 아군은 PlayerCharacter 또는 Ally
+            if (sourceActorType === "Enemy" || sourceActorType === "Troop") {
+              // 실행 액터가 적이면, 타겟은 아군(Enemy 또는 Troop)이어야 함
+              if (actorType !== "Enemy" && actorType !== "Troop") {
+                return false;
+              }
+            } else if (sourceActorType === "PlayerCharacter" || sourceActorType === "Ally") {
+              // 실행 액터가 아군이면, 타겟은 아군(PlayerCharacter 또는 Ally)이어야 함
+              if (actorType !== "PlayerCharacter" && actorType !== "Ally") {
+                return false;
+              }
+            } else {
+              // 실행 액터 타입이 불명확하면 기본 동작 (PlayerCharacter 또는 Ally)
+              if (actorType !== "PlayerCharacter" && actorType !== "Ally") {
+                return false;
+              }
             }
             
             // 자신 제외 설정이 체크되어 있으면 자신 제외
@@ -2174,6 +2204,8 @@ function hasStealthCondition(token) {
       
       // 액터 타입 필터링
       const actorType = token.actor.system?.actorType || token.actor.data?.data?.actorType || null;
+      const sourceActorType = actor.system?.actorType || actor.data?.data?.actorType || null;
+      
       if (targetType === "Scene(Enemies)") {
         // destruction 타입의 berserk 컨디션이 있으면 액터 타입 필터링 없이 자신만 제외
         if (shouldExcludeSelfForBerserk) {
@@ -2182,15 +2214,43 @@ function hasStealthCondition(token) {
           }
           // 액터 타입 필터링 없이 모든 타입 선택 가능
         } else {
-          // 일반적인 경우: 적만 선택 (enemy 또는 troop)
-          if (actorType !== "Enemy" && actorType !== "Troop") {
-            return false;
+          // 실행 액터가 Enemy 또는 Troop이면 적은 PlayerCharacter 또는 Ally
+          // 실행 액터가 PlayerCharacter 또는 Ally이면 적은 Enemy 또는 Troop
+          if (sourceActorType === "Enemy" || sourceActorType === "Troop") {
+            // 실행 액터가 적이면, 타겟은 아군(PlayerCharacter 또는 Ally)이어야 함
+            if (actorType !== "PlayerCharacter" && actorType !== "Ally") {
+              return false;
+            }
+          } else if (sourceActorType === "PlayerCharacter" || sourceActorType === "Ally") {
+            // 실행 액터가 아군이면, 타겟은 적(Enemy 또는 Troop)이어야 함
+            if (actorType !== "Enemy" && actorType !== "Troop") {
+              return false;
+            }
+          } else {
+            // 실행 액터 타입이 불명확하면 기본 동작 (Enemy 또는 Troop)
+            if (actorType !== "Enemy" && actorType !== "Troop") {
+              return false;
+            }
           }
         }
       } else if (targetType === "Scene(Allies)") {
-        // 아군만 선택 (PlayerCharacter 또는 Ally)
-        if (actorType !== "PlayerCharacter" && actorType !== "Ally") {
-          return false;
+        // 실행 액터가 Enemy 또는 Troop이면 아군은 Enemy 또는 Troop
+        // 실행 액터가 PlayerCharacter 또는 Ally이면 아군은 PlayerCharacter 또는 Ally
+        if (sourceActorType === "Enemy" || sourceActorType === "Troop") {
+          // 실행 액터가 적이면, 타겟은 아군(Enemy 또는 Troop)이어야 함
+          if (actorType !== "Enemy" && actorType !== "Troop") {
+            return false;
+          }
+        } else if (sourceActorType === "PlayerCharacter" || sourceActorType === "Ally") {
+          // 실행 액터가 아군이면, 타겟은 아군(PlayerCharacter 또는 Ally)이어야 함
+          if (actorType !== "PlayerCharacter" && actorType !== "Ally") {
+            return false;
+          }
+        } else {
+          // 실행 액터 타입이 불명확하면 기본 동작 (PlayerCharacter 또는 Ally)
+          if (actorType !== "PlayerCharacter" && actorType !== "Ally") {
+            return false;
+          }
         }
         
         // 자신 제외 설정이 체크되어 있으면 자신 제외
