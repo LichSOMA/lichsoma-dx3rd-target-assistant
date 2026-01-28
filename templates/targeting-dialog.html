@@ -1,0 +1,51 @@
+<form>
+  <div class="form-group">
+    <label>{{i18n.TargetType}}</label>
+    <select id="targetType" name="targetType">
+      <option value="-">{{i18n.TargetTypeNone}}</option>
+      <option value="Single">{{i18n.TargetTypeSingle}}</option>
+      <option value="N">{{i18n.TargetTypeN}}</option>
+      <option value="Area">{{i18n.TargetTypeArea}}</option>
+      <option value="Area(Enemies)">{{i18n.TargetTypeAreaEnemies}}</option>
+      <option value="Area(Allies)">{{i18n.TargetTypeAreaAllies}}</option>
+      <option value="Scene">{{i18n.TargetTypeScene}}</option>
+      <option value="Scene(Enemies)">{{i18n.TargetTypeSceneEnemies}}</option>
+      <option value="Scene(Allies)">{{i18n.TargetTypeSceneAllies}}</option>
+    </select>
+  </div>
+
+  <div id="nValueGroup" class="form-group">
+    <div class="form-group">
+      <label>{{i18n.NValue}}</label>
+      <input 
+        type="text" 
+        id="nValue" 
+        name="nValue" 
+        value="{{savedNValue}}"
+        placeholder="{{nValuePlaceholder}}"
+        disabled
+      />
+    </div>
+  </div>
+
+  <div class="form-group ignore-stealth-group">
+    <input 
+      type="checkbox" 
+      id="ignoreStealth" 
+      name="ignoreStealth"
+      {{#if savedIgnoreStealth}}checked{{/if}}
+    />
+    <label for="ignoreStealth">{{i18n.IgnoreStealth}}</label>
+  </div>
+
+  <div class="form-group exclude-self-group">
+    <input 
+      type="checkbox" 
+      id="excludeSelf" 
+      name="excludeSelf"
+      {{#if savedExcludeSelf}}checked{{/if}}
+      disabled
+    />
+    <label for="excludeSelf">{{i18n.ExcludeSelf}}</label>
+  </div>
+</form>

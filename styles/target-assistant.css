@@ -1,0 +1,54 @@
+/**
+ * DX3rd Target Assistant Styles
+ */
+
+.target-assistant-button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: inherit !important;
+}
+
+.target-assistant-button:hover,
+.target-assistant-button:focus,
+.target-assistant-button:active {
+  color: inherit !important;
+}
+
+.target-assistant-button i {
+  color: inherit !important;
+}
+
+.ignore-stealth-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ignore-stealth-group label {
+  margin: 0;
+  order: 1;
+}
+
+.ignore-stealth-group input[type="checkbox"] {
+  margin: 0;
+  order: 2;
+  flex-shrink: 0;
+}
+
+.exclude-self-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exclude-self-group label {
+  margin: 0;
+  order: 1;
+}
+
+.exclude-self-group input[type="checkbox"] {
+  margin: 0;
+  order: 2;
+  flex-shrink: 0;
+}
