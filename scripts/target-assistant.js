@@ -26,7 +26,7 @@ function registerSettings() {
     config: true,
     type: String,
     filePicker: "image",
-    default: "icons/svg/target.svg"
+    default: "modules/lichsoma-dx3rd-target-assistant/assets/default_crosshair.png"
   });
   
   // 크로스헤어 크기 설정
@@ -41,7 +41,7 @@ function registerSettings() {
       max: 5,
       step: 0.1
     },
-    default: 2.0
+    default: 1.0
   });
   
   // 크로스헤어 투명도 설정
@@ -308,7 +308,7 @@ function hasStealthCondition(token) {
       } else if (savedTargeting.targetType === "Scene" || savedTargeting.targetType === "Scene(Enemies)" || savedTargeting.targetType === "Scene(Allies)") {
         await executeSceneTargeting(item, actor);
       }
-    }, 500);
+    }, 100);
   });
 
   /**
@@ -799,7 +799,7 @@ function hasStealthCondition(token) {
     }
     
     // 하이라이트 표시 딜레이를 위한 추가 대기
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise(resolve => setTimeout(resolve, 100));
 
     // 액터 파라미터가 있으면 해당 액터의 토큰 찾기, 없으면 선택된 토큰 사용
     let sourceToken = null;
@@ -1010,6 +1010,7 @@ function hasStealthCondition(token) {
                   .persist()
                   .size({ width: pxSize * crosshairSizeMultiplier, height: pxSize * crosshairSizeMultiplier })
                   .opacity(crosshairAlpha)
+                  .aboveLighting()
                   .play();
               } catch (error) {
                 console.error("DX3RD-TARGET-ASSISTANT | 크로스헤어 이미지 로드 오류:", error);
@@ -1021,6 +1022,7 @@ function hasStealthCondition(token) {
                   .persist()
                   .size({ width: pxSize * crosshairSizeMultiplier, height: pxSize * crosshairSizeMultiplier })
                   .opacity(crosshairAlpha)
+                  .aboveLighting()
                   .play();
               }
             }
@@ -1596,7 +1598,7 @@ function hasStealthCondition(token) {
     }
     
     // 하이라이트 표시 딜레이를 위한 추가 대기
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise(resolve => setTimeout(resolve, 100));
 
     // 액터 파라미터가 있으면 해당 액터의 토큰 찾기, 없으면 선택된 토큰 사용
     let sourceToken = null;
@@ -1788,6 +1790,7 @@ function hasStealthCondition(token) {
                   .persist()
                   .size({ width: pxSize * crosshairSizeMultiplier, height: pxSize * crosshairSizeMultiplier })
                   .opacity(crosshairAlpha)
+                  .aboveLighting()
                   .play();
               } catch (error) {
                 console.error("DX3RD-TARGET-ASSISTANT | 크로스헤어 이미지 로드 오류:", error);
@@ -1799,6 +1802,7 @@ function hasStealthCondition(token) {
                   .persist()
                   .size({ width: pxSize * crosshairSizeMultiplier, height: pxSize * crosshairSizeMultiplier })
                   .opacity(crosshairAlpha)
+                  .aboveLighting()
                   .play();
               }
             }
@@ -2064,7 +2068,7 @@ function hasStealthCondition(token) {
     }
     
     // 하이라이트 표시 딜레이를 위한 추가 대기
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise(resolve => setTimeout(resolve, 100));
 
     // 액터 파라미터가 있으면 해당 액터의 토큰 찾기, 없으면 선택된 토큰 사용
     let sourceToken = null;
